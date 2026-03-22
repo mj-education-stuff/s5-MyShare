@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MyShare</string>
+    <string name="groups">Groups</string>
 </resources>

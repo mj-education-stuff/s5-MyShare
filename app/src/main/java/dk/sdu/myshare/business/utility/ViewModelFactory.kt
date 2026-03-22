@@ -18,7 +18,7 @@ object ViewModelFactory {
     }
 
     fun getOpenGroupViewModel(groupId: Int): OpenGroupViewModel {
-        return OpenGroupViewModel(DependencyInjectionContainer.userRepository, DependencyInjectionContainer.groupRepository, groupId)
+        return OpenGroupViewModel(DependencyInjectionContainer.userRepository, DependencyInjectionContainer.groupRepository, groupId, DependencyInjectionContainer.fakecallRepository)
     }
 
     fun getManageGroupMembersViewModel(groupId: Int): ManageGroupMemberViewModel {

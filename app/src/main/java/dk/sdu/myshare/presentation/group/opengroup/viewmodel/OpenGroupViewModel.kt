@@ -6,7 +6,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.compose.rememberNavController
+import dk.sdu.myshare.business.model.fakecall.FakecallData
+import dk.sdu.myshare.business.model.fakecall.FakecallRepository
 import dk.sdu.myshare.business.model.group.GroupData
 import dk.sdu.myshare.business.model.group.GroupRepository
 import dk.sdu.myshare.business.model.user.UserData
@@ -15,11 +18,13 @@ import dk.sdu.myshare.business.utility.ColorGenerator
 import dk.sdu.myshare.business.utility.ProfileFormatter
 import dk.sdu.myshare.business.utility.ViewModelFactory
 import dk.sdu.myshare.presentation.group.opengroup.view.OpenGroupView
+import kotlinx.coroutines.launch
 
 class OpenGroupViewModel(
     private val userRepository: UserRepository,
     private val groupRepository: GroupRepository,
-    private val openGroupId: Int
+    private val openGroupId: Int,
+    private val fakecallRepository: FakecallRepository
 ) : ViewModel() {
     private val _currentGroupMembers: MutableLiveData<List<UserData>> = MutableLiveData<List<UserData>>(emptyList())
     val currentUsers: LiveData<List<UserData>> = _currentGroupMembers
@@ -29,9 +34,16 @@ class OpenGroupViewModel(
 
     private val generatedUserColors: MutableMap<Int, Color> = mutableMapOf()
 
+    private val _fakecallData: MutableLiveData<FakecallData> = MutableLiveData<FakecallData>()
+    val fakecallData: LiveData<FakecallData> = _fakecallData
+
+    private val _isLoading: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     init {
         observeGroupData()
         refreshCurrentGroup()
+//        fetchFakedata()
     }
 
     private fun observeGroupData() {
@@ -89,6 +101,21 @@ class OpenGroupViewModel(
 
     fun getCurrentUserId(): Int {
         return 1 // FIXME: Hardcoded for now
+    }
+
+    fun fetchFakedata() {
+        viewModelScope.launch {
+            _isLoading.postValue(true)
+            try {
+                val fakecallDataResult: FakecallData? = fakecallRepository.getFakecallDataById(1)
+                fakecallDataResult?.let {
+                    _fakecallData.postValue(it)
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            _isLoading.postValue(false)
+        }
     }
 }
 

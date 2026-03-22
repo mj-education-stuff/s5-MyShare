@@ -23,9 +23,9 @@ import dk.sdu.myshare.presentation.friends.view.FriendsViewRoot
 import dk.sdu.myshare.presentation.group.addtogroup.view.AddUserToGroupViewRoot
 import dk.sdu.myshare.presentation.group.managegroupmember.view.ManageGroupMemberViewRoot
 import dk.sdu.myshare.presentation.group.opengroup.view.OpenGroupViewRoot
-import dk.sdu.myshare.ui.theme.MyShareTheme
 import dk.sdu.myshare.presentation.home.view.HomeViewRoot
 import dk.sdu.myshare.presentation.profile.otherprofile.view.OtherProfileViewRoot
+import dk.sdu.myshare.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MyApp() {
-    MyShareTheme {
+    AppTheme  {
         val navController = rememberNavController()
         Scaffold(
             modifier = Modifier
